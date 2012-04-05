@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.sites.models import Site
+from django.forms import ModelForm
 
 
 class Menu(models.Model):
@@ -25,3 +26,13 @@ class MenuItem(models.Model):
         
     def __unicode__(self):
         return self.text
+        
+
+class MenuForm(ModelForm):
+    class Meta:
+        model = Menu
+        
+
+class MenuItemForm(ModelForm):
+    class Meta:
+        model = MenuItem

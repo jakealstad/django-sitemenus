@@ -1,0 +1,25 @@
+{% extends "sitemenus/index.html" %}
+
+{% block edit %}
+    <h2><a href="/">Back</a></h2>
+    <h1>{{ menu }} Menu Edit</h1>
+
+    <form method="post" action="">{% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.id }}
+            <h2>Item #{{ forloop.counter }}</h2>
+            <ul>
+                <li>Item Text: {{ form.text }} {{ form.text.errors }}</li>
+                <li>Item Description: {{ form.description }} {{form.description.errors }}</li>
+                <li>Item Link: {{ form.link }} {{ form.link.errors }}</li>
+                <li>Item Parent: {{ form.parent_item }} {{form.parent_item.errors }}</li>
+                <li>Item Position: {{ form.order }} {{ form.order.errors }}</li>
+                <hr/>
+            </ul>
+        {% endfor %}
+        <input class="submit" id="save-menu" type="submit" value="Save Menu" /> 
+    </form>
+
+    <h2><a href="/">Back</a></h2>
+{% endblock %}
