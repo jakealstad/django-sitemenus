@@ -1,12 +1,13 @@
-from django import forms
-from django.forms.models import BaseModelFormSet, modelformset_factory, ModelForm
-from sitemenus.models import MenuItem
+#from django import forms
+#from sitemenus.models import Menu
 
-class MyModelFormSet(BaseModelFormSet):
-        def __init__(self, *args, **kwargs):
-            super(MyModelFormSet, self).__init__(*args, **kwargs)
-            for form in self.forms:
-                form.empty_permitted = False
+#class JSONForm(forms.ModelForm):
+    #class Meta:
+        #model = Menu
+        
 
-
-MenuItemFormSet = modelformset_factory(MenuItem, formset=MyModelFormSet, exclude='menu')
+#class MenuForm(forms.Form):
+    #title = forms.CharField(max_length=100)
+    #description = forms.CharField(widget=forms.Textarea)
+    #url = forms.URLField()
+    #order = forms.IntegerField()
