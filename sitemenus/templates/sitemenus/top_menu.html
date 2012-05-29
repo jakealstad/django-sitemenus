@@ -1,0 +1,7 @@
+<ul>
+{% for item in menu %}
+<li>{{ item.title }}<span class="web-symbols">[</span><span class="nav-first-level-desc">{{ item.description }}</span>
+{% if item.sub_items %}{% with item.sub_items as menu %}{% include "sitemenus/menu.html" %}{% endwith %}
+{% endif %}</li>
+{% endfor %}
+</ul>

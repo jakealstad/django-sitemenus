@@ -1,0 +1,230 @@
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+/* =============================================================
+   Logo and Main Nav
+   ========================================================== */
+#nav-wrapper {
+    background: #666;
+    -webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.28);
+    -moz-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.28);
+    -o-box-shadow:  0 2px 2px rgba(0, 0, 0, 0.28);
+    -ms-box-shadow:  0 2px 2px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.28);
+    position: relative;
+    width: 100%;
+    z-index: 8000;
+}
+#naver {
+    font-family: 'Yanone Kaffeesatz', 'Open Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    list-style: none;
+    margin: 0 auto;
+    width: 1000px;
+    z-index: 8100;
+}
+
+#naver ul {
+    margin: 0;
+}
+
+.site-logo {
+    border-left: 1px solid #444;
+    border-right: 1px solid #444;
+    float: left;
+    height: 65px;
+    min-width: 90px;
+    padding: 5px;
+    z-index: 8110;
+}
+
+.site-logo img {
+    margin-top: 3px;
+    max-height: 60px;
+    z-index: 8115;
+}
+
+#naver > ul > li {
+    border-right: 1px solid #444;
+    color: #fff;
+    display: block;
+    float: left;
+    height: 55px;
+    padding: 10px;
+    position: relative;
+    width: 130px;
+    z-index: 8120;
+}
+
+#naver > ul > li .web-symbols {
+    color: rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.nav-first-level-desc {
+    display: block;
+    font-size: 13px;
+    font-weight: 300;
+    margin-top: 5px;
+}
+
+#naver > ul > li:hover {
+    background: #383838;
+}
+
+/* Drop-down menu styles */
+#naver > ul > li > ul a:link,
+#naver > ul > li > ul a:visited,
+#naver > ul > li > ul a:hover {
+    color: #111;
+}
+
+#naver > ul > li > ul {
+    font-family: 'Helvetica Neue', Helvetica, 'Open Sans', Arial, sans-serif;
+    display: none;
+    padding: 8px 12px 5px 12px;
+    position: relative;
+    z-index: 7900;
+}
+
+#naver > ul > li:hover > ul {
+    background: #fcfcfc;
+    border-right: 5px solid #dedede;
+    border-left: 5px solid #dedede;
+    border-bottom: 5px solid #dedede;
+    -webkit-border-radius: 0 0px 2px 2px;
+    -moz-border-radius: 0 0px 2px 2px;
+    -o-border-radius: 0 0 2px 2px;
+    -ms-border-radius: 0 0 2px 2px;
+    -khtml-border-radius: 0 0 2px 2px;
+    border-radius: 0 0px 2px 2px;
+    display: block;
+	left: -5px;
+	position: absolute;
+	top: 75px;
+	width: 200px;
+	z-index: 7900;
+}
+
+#naver > ul > li > ul li {
+    position: relative;
+    z-index: 8000;
+}
+#naver > ul > li > ul > li a {
+    border-bottom: 1px solid #e3e3e3;
+    border-top: 1px solid #fff;
+}
+
+#naver > ul > li > ul li a {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 13px;
+    padding: 10px 8px;
+    position: relative;
+    z-index: 8100;
+}
+
+#naver > ul > li > ul li a:hover {
+    background: #fcfcfc;
+	text-decoration: none;
+}
+
+#naver > ul > li:hover > ul li a {
+    display: block;
+}
+
+#naver > ul > li > ul > li > ul { /** third level **/
+    background: #fcfcfc;
+    position: relative;
+    z-index: 8110;
+}
+
+#naver > ul > li > ul > li > ul a:link,
+#naver > ul > li > ul > li > ul a:visited {
+    border-top: 1px solid #e3e3e3;
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 12px;
+    padding: 10px 12px;
+}
+
+
+
+/* Nav - Station Styles
+----------------------------------------------*/
+.site-logo {
+    border-left: 1px solid #003658;
+    border-right: 1px solid #003658;
+}
+.site-logo img {
+    margin: 3px 0 0 6px;
+}
+
+/*** 100% width nav bar ***/
+#nav-wrapper {
+	background-color: #0372b6;
+	background: -moz-linear-gradient(top, #0374BA 0%, #0D3B56 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0374BA), color-stop(100%,#0D3B56)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #0374BA 0%,#0D3B56 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #0374BA 0%,#0D3B56 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #0374BA 0%,#0D3B56 100%); /* IE10+ */
+	background: linear-gradient(top, #0374BA 0%,#0D3B56 100%); /* W3C */
+}
+
+/*** first-level list item ***/
+#naver > ul > li {
+    border-right: 1px solid #003658;
+}
+
+.nav-first-level-desc {
+    color: #B3DAFF;
+}
+
+/*** drop-downs and hover state of first level (including logo) ***/
+#naver > ul > li:hover, 
+.site-logo:hover, 
+#naver > ul > li > ul > li > ul, 
+#naver > ul > li:hover > ul {
+    background-color: #005488;
+}
+
+/*** last list-item of second level ***/
+#naver > ul > li > ul > li:last-child {
+    border-bottom: 1px solid #00609C;
+}
+
+/*** link text color for drop-downs ***/
+#naver ul > li > ul a:link, 
+#naver ul > li > ul a:visited, 
+#naver ul > li > ul a:hover {
+    color: #FFFFFF;
+}
+
+/*** first list-item of second level ***/
+#naver > ul > li > ul > li:first-child {
+    border-top: 1px solid #003C60;
+}
+
+/*** drop-downs ***/
+#naver > ul > li:hover > ul {
+    border-bottom: 5px solid #003C60;
+    border-left: 5px solid #003C60;
+    border-right: 5px solid #003C60;
+}
+
+/*** hover state of second and third level menu-items ***/
+#naver > ul > li > ul li a:hover {
+    background: none repeat scroll 0 0 #0069AA;
+}
+
+/*** second and third-level menu-items ***/
+#naver > ul > li > ul > li a,
+#naver > ul > li > ul > li > ul a:link, 
+#naver > ul > li > ul > li > ul a:visited {
+    border-bottom: 1px solid #003C62;
+    border-top: 1px solid #00609C;
+}				

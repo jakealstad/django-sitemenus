@@ -1,0 +1,7 @@
+{% with "sitemenus/menu.html" as filename %}
+<ul>
+{% for item in menu %}
+<li><a href="{{ item.url }}">{{ item.title }}</a>{% if item.sub_items %}{% with item.sub_items as menu %}{% include filename %}{% endwith %}{% endif %}</li>
+{% endfor %}
+</ul>
+{% endwith %}

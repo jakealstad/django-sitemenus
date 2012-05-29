@@ -1,121 +1,22 @@
 {% extends "sitemenus/index.html" %}
 
 {% block edit %}
-    <h2><a href="/">Back</a></h2>
-    <h1>{{ site }} Menu Edit</h1>
+
+    <h2><a href="/sitemenus/">Back</a></h2>
+    <h1>{{ current_site.name }} Menu Tree</h1>
     
     <div id="menu-edit">
-        <ul>
-        {% for item in menu.root %}
         
-            <li class="root">
-                <div class="form">
-                    {{ item.title }} <a class="toggle" href="">Edit &raquo;</a>
-                    <form class="edit_form" action="#" method="post">
-                        <hr/>
-                        <ul>
-                            <li>Title: <input class="title" type="text" name="title" title="Title" /></li>
-                            <li>Description: <input class="description" type="text" name="description" title="Description" /></li>
-                            
-                            <li>Order: <input class="order" type="text" name="order" title="Order" /></li>
-                        </ul>
-                    </form>
-                </div>
-                <ul>
-                    {% for sub_item in item.sub_items %}
-                    {% if sub_item.title %} 
-                    <li class="sub1">
-                        <div class="form">
-                            {{ sub_item.title }} <a class="toggle" href="#">Edit &raquo;</a>
-                            <form class="edit_form" action="#" method="post">
-                                <hr/>
-                                <ul>
-                                    <li>Title: <input class="title" type="text" name="title" title="Title" /></li>
-                                    <li>Description: <input class="description" type="text" name="description" title="Description" /></li>
-                                    <li>URL: <input class="url" type="text" name="url" title="URL" /></li>
-                                    <li>Order: <input class="order" type="text" name="order" title="Order" /></li>
-                                </ul>
-                            </form>
-                        </div>
-                        <ul>
-                            {% for sub_item in sub_item.sub_items %}
-                            {% if sub_item.title %}
-                            <li class="sub2">
-                                <div class="form">
-                                    {{ sub_item.title }} <a class="toggle" href="#">Edit &raquo;</a>
-                                    <form class="edit_form" action="#" method="post">
-                                        <hr/>
-                                        <ul>
-                                            <li>Title: <input class="title" type="text" name="title" title="Title" /></li>
-                                            <li>Description: <input class="description" type="text" name="description" title="Description" /></li>
-                                            <li>URL: <input class="url" type="text" name="url" title="URL" /></li>
-                                            <li>Order: <input class="order" type="text" name="order" title="Order" /></li>
-                                        </ul>
-                                    </form>
-                                </div>
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-                        </ul>
-                    </li>
-                    {% endif %}
-                    {% endfor %}
-                </ul>
-            </li>
-             
-        {% endfor %}
-        </ul>
     </div>
     
-    <script type="text/javascript">
-            
-        window.addEvent('domready', function() {
-            
-            var menuJSON = '{{ menu }}';
-            menuJSON = ("'" + menuJSON.replace(/&#39;/g, "\"") + "'");
-            console.log(menuJSON);
-            console.log(JSON.decode(menuJSON));
-            
-            
-            var formTitles = $$('input[name="title"]');
-            
-
-            
-            formTitles.each(function(formTitle, i) {
-               
-               formTitle.setProperty('value', menuJSON);
-                
-            });
-            
-            
-            //grab all forms on the page
-            var forms = $$('.edit_form');
-            //grab all edit anchors on the page
-            var edits = $$('.toggle');
-            //initialize an array to store toggles
-            var toggles = new Array();
-            
-            //loop through each form element
-            edits.each(function(edit, i) {
-               
-               //create slide instance for each edit anchor
-               var toggle = new Fx.Slide(forms[i]);
-               //and add them to the array
-               toggles[i] = toggle;
-               
-               //event listener for edit anchor click
-               edit.addEvent('click', function(e){
-                   e.stop();               
-                   toggle.toggle();
-               });
-               
-               //hide all forms by default
-               toggle.hide();
-               
-            });
-            
-        });
-        
-    </script>
+    <form id="submitform" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="menudata" method="POST" action="" />
+        <input type="submit" name="submit" value="Save Changes" /> 
+    </form>
     
+    <div id="json" class="hidden">
+        {{ menu|safe }}
+    </div>
+        
 {% endblock %}
