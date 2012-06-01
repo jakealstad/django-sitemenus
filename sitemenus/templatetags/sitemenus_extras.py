@@ -1,11 +1,12 @@
 from django import template
 from sitemenus.models import Menu
 from sitemenus.utils import render_menu
-from sitemenus.views import edit
+from sitemenus.views import menu_edit
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.http import HttpRequest
 import json
+import sys
 
 register = template.Library()
 
@@ -19,7 +20,7 @@ class CurrentMenuNode(template.Node):
             print 'using cache'
             return cached_menu
         
-        cache.set('sitemenus_' + current_site.domain, render_menu(current_site), 0)
+        cache.set('sitemenus_' + current_site.domain, render_menu(current_site), sys.maxint)
         return render_menu(current_site)
 
 

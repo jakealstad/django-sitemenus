@@ -51,13 +51,6 @@
     
     </nav><!-- end nab -->
 </div><!-- end nav-wrapper -->	
-
-
-    <ul>
-        {% for site in menulist %}
-            <li><a href="{% url sitemenus_menu_edit site.site.domain %}">{{ site }}</a></li>
-        {% endfor %}
-    </ul>
         
         
         {% block edit %}{% endblock %}

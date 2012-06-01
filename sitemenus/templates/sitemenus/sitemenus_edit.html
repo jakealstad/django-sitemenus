@@ -2,8 +2,9 @@
 
 {% block edit %}
 
-    <h2><a href="/sitemenus/">Back</a></h2>
-    <h1>{{ current_site.name }} Menu Tree</h1>
+    {% if success %}
+    <h1>menu updated</h1>
+    {% endif %}
     
     <div id="menu-edit">
         
