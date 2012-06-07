@@ -15,8 +15,6 @@ def menu_edit(request):
     current_site = get_current_site(request)
     menu = Menu.objects.get(site=current_site).json_tree
 
-    
-
     if request.method =='POST':
         Menu.objects.get(site=current_site).delete()
         menu = striptags(request.POST.get('menudata'))
@@ -27,11 +25,8 @@ def menu_edit(request):
         cache.set('sitemenus_' + current_site.domain, render_menu(current_site), sys.maxint)
         
         return redirect('sitemenus_menu_edit')
-    
-    
-    
+
     success = request.session.get('success')
-    
     if success:
         del request.session['success']
     

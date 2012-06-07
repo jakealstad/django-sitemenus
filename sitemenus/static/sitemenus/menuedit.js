@@ -1,16 +1,16 @@
-window.addEvent('domready', function() {
-    
+window.addEvent('domready', function () {
+
     //parse menu object
     var menu = JSON.decode($('json').get('text'));
 
- 
+
     //construct menu from JSON
     var constructMenu = function constructMenu(menuArray) {
-        
+
         var menuList = new Element('ol');
         var menuPosition = new Element('li', {class: 'position'});
         menuList.grab(menuPosition);
-        
+
         if(menuArray){
             menuArray.each( function(item){
                 var menuItem = new Element('li');
@@ -24,43 +24,29 @@ window.addEvent('domready', function() {
                 menuList.adopt(menuPosition);
                 menuItem.grab(menuFormURL, 'top');
                 menuItem.grab(menuFormDescription, 'top');
-                menuItem.grab(menuFormTitle, 'top');               
-
+                menuItem.grab(menuFormTitle, 'top');
             });
         }        
         return menuList;
     };
-    
-    
+
+
     $('menu-edit').grab(constructMenu(menu));
-    
+
 
     //create form
     var menulist = $('menu-edit').getFirst('ol');
     var menuForm = new Element('form', {id: 'menuform', method: 'post'}).wraps(menulist);
-    
-    var addToggles = function() {
-        $$('#menuform > ol > li:not(.add-item, .remove-item, .position)').each( function(item) {
-            var toggle = new Element('a', {class: 'toggle', html: 'toggle'});
-            toggle.inject(item, 'before');
-        });
-    };
-    
-    
-    addToggles();
-    toggleMenu();
-    
-    
+
+
     //add remove button and position item for new menu item
     var removeButtons = function() {
         $$('#menuform ol li:not(.add-item, .remove-item, .position)').each( function(item) {
             if (item.getElement('.remove-item')) {
             } else {
-                var menuItemRemove = new Element('li', {class: 'remove-item', html: '-'});
+                var menuItemRemove = new Element('span', {class: 'remove-item', html: '-'});
                 menuItemRemove.inject(item, 'top'); 
-                
             }
-            
             if (item.getPrevious('.position')) {
             } else {
                 var menuPosition = new Element('li', {class: 'position'});
@@ -68,25 +54,22 @@ window.addEvent('domready', function() {
             }
         });
     };
-    
-    
+
+
     removeButtons();
-    
-    
+
+
     //remove an item
-    $('menuform').addEvent('click:relay(li.remove-item)', function(e){
-        var clicked = e.target.getParent();
-        if (clicked.getPrevious('.toggle')) {
-            clicked.getPrevious().getPrevious().dispose();
-            clicked.getPrevious().dispose();
-            clicked.dispose();
-        } else {
-            clicked.getPrevious().dispose();
-            clicked.dispose();
+    $('menuform').addEvent('click:relay(span.remove-item)', function(e){
+        if (childrenDepth(e.target.getParent()) > 1 && !confirm('There are sub-items, are you sure you want to delete this item?')) {
+            return;
         }
+        var clicked = e.target.getParent();
+        clicked.getPrevious().dispose();
+        clicked.dispose();
     });
-    
-    
+
+
     //create new item
     var newItem = function(clicked){
         var menuItem = new Element('li');
@@ -96,7 +79,6 @@ window.addEvent('domready', function() {
         var menuList = new Element('ol');
         var menuPosition = new Element('li', {class: 'position'});
         var menuPosition2 = new Element('li', {class: 'position'});
-        var toggle = new Element('a', {class: 'toggle', html: 'toggle'});
         
         clicked.grab(menuItem, 'after');
         menuItem.grab(menuFormTitle);
@@ -105,11 +87,38 @@ window.addEvent('domready', function() {
         menuItem.grab(menuList);
         menuItem.grab(menuPosition, 'after');
         menuList.grab(menuPosition2, 'bottom');
-        toggle.inject(menuItem, 'before');       
+        menuItem.getElement('input').focus();
     };
-    
 
-    //move/add an item
+
+    //calculate depth of menu items children
+    var childrenDepth = function childrenDepth(item) {
+        var depth = 0;
+        var children = item.getChildren('ol > li:not(.position)');
+        if (children) {
+            var maxChildDepth = 0;
+            children.each(function(child) {
+                var childDepth = childrenDepth(child);
+                if (childDepth > maxChildDepth) {
+                    maxChildDepth = childDepth;
+                }
+            });
+            depth = maxChildDepth + 1;
+        }      
+        return depth;
+    };
+
+
+    //calculate an items current depth
+    var itemDepth = function itemDepth(item) {
+        var parentGroup = item.getParents('ol');
+        var parents = parentGroup.length - 1;
+        console.log(parents);
+        return parents;
+    };
+
+
+    //move items & add a new item (could probably be on its own...)
     var menuGroup1;
     $('menuform').addEvent('click:relay(li)', function(e) {
         if (!menuGroup1) {
@@ -119,7 +128,6 @@ window.addEvent('domready', function() {
                     var clicked = e.target;
                     newItem(clicked);
                     removeButtons();
-                    toggleMenu();
                 }
             } else {
                 e.target.set('class', 'selected');
@@ -128,12 +136,17 @@ window.addEvent('domready', function() {
                 } else { 
                     menuGroup1 = [e.target, e.target.getNext()];
                 }
-                console.log(menuGroup1);
             }
         } else {
+            var originDepth = childrenDepth(menuGroup1[0]);
             var destination = e.target;
-            if (menuGroup1[0].getElement(destination) || !destination.hasClass('position') || destination === menuGroup1[1] || destination.getParent('#menuform > ol > li > ol > li > ol')) {
+            var destinationDepth = itemDepth(destination);
+            console.log('origin depth - ' + originDepth);
+            console.log('destination depth - ' + destinationDepth);
+            
+            if (menuGroup1[0].getElement(destination) || !destination.hasClass('position') || destination === menuGroup1[1] || (originDepth + destinationDepth > 3)) {
                 console.log('invalid destination based on that target');
+                alert('this is an invalid destination or there are too many sub-items for this destination');
                 menuGroup1[1].getPrevious().removeClass('selected');
                 menuGroup1 = null;
             } else {
@@ -144,19 +157,16 @@ window.addEvent('domready', function() {
                 }
                 menuGroup1[1].getPrevious().removeClass('selected');
                 menuGroup1 = null;
-                console.log(menuGroup1);
             }
         }
-        
         return true;
     });
-    
-    
-    //recursively construct JSON object from form
+
+
+    //construct JSON object from form data
     var constructObject = function constructObject(menuForm) {
         var menuArray = [];
-        
-        var menuItems = menuForm.getChildren('li:not(.add-item, .remove-item, .position)');
+        var menuItems = menuForm.getChildren('li:not(.position)');
         menuItems.each( function(listItem) {
             var menuItem = {};
             menuItem.title = listItem.getElement('input[name="title"]').get('value');
@@ -167,32 +177,13 @@ window.addEvent('domready', function() {
             if(menuSubItems){
                 menuItem.sub_items = constructObject(menuSubItems);
             }
-            
             menuArray.push(menuItem);
-
         });
         return menuArray;
     };
-    
-    
-    //menu open/close animation
-    function toggleMenu() {
-        
-        var lists = $$('#menuform > ol > li > ol');
-        var button = $$('.toggle');
 
-        button.each(function(edit, i) {
-            var slideToggle = new Fx.Slide(lists[i], {resetHeight: 'true'});
 
-            edit.addEvent('click', function(e){
-                e.stop();
-                slideToggle.toggle();
-            });
-                //slideToggle.hide();
-        });
-    };
-    
-    
+    //send json as post data to backend
     $$('input[name="submit"]').addEvent('click', function(e){
         var formMenu = $('menuform').getElement('ol');            
         var menuArray = constructObject(formMenu);
@@ -202,5 +193,4 @@ window.addEvent('domready', function() {
      
         return true;
     });
-
 });
