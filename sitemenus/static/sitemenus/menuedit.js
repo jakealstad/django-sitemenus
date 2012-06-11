@@ -37,11 +37,18 @@ window.addEvent('domready', function () {
     //create form
     var menulist = $('menu-edit').getFirst('ol');
     var menuForm = new Element('form', {id: 'menuform', method: 'post'}).wraps(menulist);
-
+    
+    
+    var addToggles = function() {
+        $$('#menuform > ol > li:not(.remove-item, .position)').each(function(item) {
+            var toggle = new Element('a', {class: 'toggle', html: 'toggle'});
+            toggle.inject(item, 'before');
+        });
+    };
 
     //add remove button and position item for new menu item
     var removeButtons = function() {
-        $$('#menuform ol li:not(.add-item, .remove-item, .position)').each( function(item) {
+        $$('#menuform ol li:not(.add-item, .remove-item, .position)').each(function(item) {
             if (item.getElement('.remove-item')) {
             } else {
                 var menuItemRemove = new Element('span', {class: 'remove-item', html: '-'});
@@ -55,8 +62,22 @@ window.addEvent('domready', function () {
         });
     };
 
+    //menu open/close animation
+    var toggleMenu = function() {
+        $$('.toggle').each(function(item) {
+            var slideToggle = new Fx.Slide(item.getNext().getElement('ol'), {resetHeight: 'true'});
+            item.addEvent('click', function(e){
+                console.log('clicked');
+                e.stop();
+                slideToggle.toggle();
+            });
+        });
+    };
 
+
+    addToggles();
     removeButtons();
+    toggleMenu();
 
 
     //remove an item
@@ -64,9 +85,16 @@ window.addEvent('domready', function () {
         if (childrenDepth(e.target.getParent()) > 1 && !confirm('There are sub-items, are you sure you want to delete this item?')) {
             return;
         }
-        var clicked = e.target.getParent();
-        clicked.getPrevious().dispose();
-        clicked.dispose();
+        if (itemDepth(e.target) === 0) {
+            var clicked = e.target.getParent();
+            clicked.getPrevious().getPrevious().dispose();
+            clicked.getPrevious().dispose();
+            clicked.dispose();
+        } else {
+            var clicked = e.target.getParent();
+            clicked.getPrevious().dispose();
+            clicked.dispose();
+        }
     });
 
 
@@ -80,12 +108,18 @@ window.addEvent('domready', function () {
         var menuPosition = new Element('li', {class: 'position'});
         var menuPosition2 = new Element('li', {class: 'position'});
         
+                
+        
         clicked.grab(menuItem, 'after');
         menuItem.grab(menuFormTitle);
         menuItem.grab(menuFormDescription);
         menuItem.grab(menuFormURL);
         menuItem.grab(menuList);
         menuItem.grab(menuPosition, 'after');
+        if (itemDepth(clicked) === 0) {
+            var toggle = new Element('a', {class: 'toggle', html: 'toggle'});
+            toggle.inject(menuItem, 'before');
+        }
         menuList.grab(menuPosition2, 'bottom');
         menuItem.getElement('input').focus();
     };
@@ -94,7 +128,12 @@ window.addEvent('domready', function () {
     //calculate depth of menu items children
     var childrenDepth = function childrenDepth(item) {
         var depth = 0;
-        var children = item.getChildren('ol > li:not(.position)');
+        if (item.getElement('div')) {
+            var children = item.getChildren('div > ol > li:not(.position)');
+        } else {
+            var children = item.getChildren('ol > li:not(.position)');
+        }
+        console.log(children);
         if (children) {
             var maxChildDepth = 0;
             children.each(function(child) {
@@ -113,7 +152,7 @@ window.addEvent('domready', function () {
     var itemDepth = function itemDepth(item) {
         var parentGroup = item.getParents('ol');
         var parents = parentGroup.length - 1;
-        console.log(parents);
+        //console.log(parents);
         return parents;
     };
 
