@@ -19,8 +19,9 @@ class CurrentMenuNode(template.Node):
         if cached_menu:
             return cached_menu
         
-        cache.set('sitemenus_' + current_site.domain, render_menu(current_site), sys.maxint)
-        return render_menu(current_site)
+        rendered_menu = render_menu(current_site)
+        cache.set('sitemenus_' + current_site.domain, rendered_menu, sys.maxint)
+        return rendered_menu
 
 
 @register.tag(name="get_menu")
