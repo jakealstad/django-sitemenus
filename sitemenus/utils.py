@@ -5,7 +5,10 @@ import json
 
 
 def render_menu(site):
-    menu = json.loads(Menu.objects.get(site=site).json_tree)
+    try:
+        menu = json.loads(Menu.objects.get(site=site).json_tree)
+    except Menu.DoesNotExist:
+        menu = []
     
     t = template.loader.get_template('sitemenus/top_menu.html')
     c = template.Context({"menu": menu})

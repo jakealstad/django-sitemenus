@@ -17,7 +17,6 @@ class CurrentMenuNode(template.Node):
         cached_menu = cache.get('sitemenus_' + current_site.domain)
         
         if cached_menu:
-            print 'using cache'
             return cached_menu
         
         cache.set('sitemenus_' + current_site.domain, render_menu(current_site), sys.maxint)

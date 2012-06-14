@@ -190,6 +190,24 @@ window.addEvent('domready', function () {
                 alert('this is an invalid destination or there are too many sub-items for this destination');
                 menuGroup.removeClass('selected');
                 menuGroup = null;
+            } else if (menuGroup.getPrevious('.toggle')) {
+                menuGroup.getNext().inject(destination, 'after');
+                var moveToggle = menuGroup.getPrevious();
+                menuGroup.inject(destination, 'after');
+                moveToggle.inject(menuGroup, 'before');
+                menuGroup.removeClass('selected');
+                menuGroup = null;
+            } else if (!menuGroup.getPrevious('.toggle') && destinationDepth <= 2) {
+                menuGroup.getNext().inject(destination, 'after');
+                menuGroup.inject(destination, 'after');
+                var toggle = new Element('a', {class: 'toggle', html: 'toggle'}).inject(menuGroup, 'before');
+                var slideToggle = new Fx.Slide(toggle.getNext().getElement('ol'), {resetHeight: 'true'});
+                    toggle.addEvent('click', function(e){
+                        e.stop();
+                        slideToggle.toggle();
+                });
+                menuGroup.removeClass('selected');
+                menuGroup = null;
             } else {
                 menuGroup.getNext().inject(destination, 'after');
                 menuGroup.inject(destination, 'after');

@@ -13,14 +13,19 @@ import sys
 @transaction.commit_on_success
 def menu_edit(request):
     current_site = get_current_site(request)
-    menu = Menu.objects.get(site=current_site).json_tree
-
+    try:
+        menu = Menu.objects.get(site=current_site).json_tree
+    except Menu.DoesNotExist:
+        menu = '[{"title": "", "description": "", "url": ""}]'
+        
     if request.method =='POST':
-        Menu.objects.get(site=current_site).delete()
+        try:
+            Menu.objects.get(site=current_site).delete()
+        except Menu.DoesNotExist:
+            pass
         menu = striptags(request.POST.get('menudata'))
         menu_obj = Menu(json_tree=menu, site_id=current_site.id)
         menu_obj.save()
-        print 'updating cache'
         request.session['success'] = True
         cache.set('sitemenus_' + current_site.domain, render_menu(current_site), sys.maxint)
         
