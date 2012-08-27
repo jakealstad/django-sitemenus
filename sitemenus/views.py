@@ -1,3 +1,6 @@
+import json
+import sys
+
 from sitemenus.models import Menu
 from sitemenus.utils import render_menu
 from django.contrib.sites.models import get_current_site
@@ -6,8 +9,6 @@ from django.http import HttpResponseRedirect, HttpRequest, HttpResponse
 from django.template.defaultfilters import striptags
 from django.db import transaction
 from django.core.cache import cache
-import json
-import sys
 
 
 @transaction.commit_on_success
